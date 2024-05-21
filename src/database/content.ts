@@ -21,16 +21,12 @@ async function init(){
     await init()
 })()
 
-async function createScientificArticle(writer : string ,years : string,content : string,volume : string,link_docs :  string){
+async function createScientificArticle(content : string){
     try{
         if(!contents) await init();
         const rs = await contents.insertOne({
             type:"baibaokhoahoc",
-            writer: writer,
-            years: years,
-            content: content,
-            volume: volume,
-            link: link_docs
+            content: content
         });
         return rs;
     }catch(error){

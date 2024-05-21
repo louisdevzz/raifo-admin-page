@@ -1,6 +1,6 @@
 export default function Layout({children}:{children:any}){
     return(
-        <div className="flex flex-row bg-[#f3f4f6]">
+        <div className="flex min-h-screen flex-row ">
             <div className="w-64 flex flex-col flex-shrink-0 antialiased bg-gray-50 text-gray-800">
             <div className="fixed flex flex-col top-0 left-0 w-64 bg-white h-full border-r">
                 <div className="flex items-center justify-center h-14 border-b">
@@ -85,7 +85,7 @@ export default function Layout({children}:{children:any}){
                 </div>
             </div>
             </div>
-            <div className="flex flex-col px-4 w-full bg-[#f3f4f6]">
+            <div className="flex flex-col px-4 w-full h-screen bg-[#f3f4f6]">
                 <div className="app-header w-full py-3">
                     <div className="flex items-center gap-3">
                         <button id="button-toggle-menu" className="nav-link p-2">
@@ -132,7 +132,7 @@ export default function Layout({children}:{children:any}){
                         </div>
                     </div>
                 </div>
-                <div>
+                <div className="h-screen">
                     {children}
                 </div>
             </div>

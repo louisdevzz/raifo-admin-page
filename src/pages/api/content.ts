@@ -10,7 +10,7 @@ export default async function handler(
     const {type,writer,years,volume,content,link} = req.body;
     let result;
     if(type=="baibaokhoahoc"){
-      result = await createScientificArticle(writer,years,content,volume,link);
+      result = await createScientificArticle(content);
     }else if(type=="baibaohoithao"){
       result = await createConferencePaper(writer,years,content,volume,link);
     }else if(type=="detainghiencuu"){

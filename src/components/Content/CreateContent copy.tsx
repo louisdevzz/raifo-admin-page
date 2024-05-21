@@ -122,7 +122,11 @@ export default function CreateContent(){
     const handleCreateScientificArticle = async() =>{
         const result = await axios.post("/api/content",{
             type:"baibaokhoahoc",
-            content: content
+            writer: writer,
+            volume: volume,
+            content: content,
+            years: years.slice(0,4),
+            link: link
         },{
             headers: {
                 "Content-Type": "application/json",
@@ -131,7 +135,11 @@ export default function CreateContent(){
         })
         if(result){
             setIsCreate(true)
+            setWriter('');
+            setYears('')
             setContent('')
+            setVolume('')
+            setLink('')
         }else{
             setIsCreate(false)
         }
@@ -156,17 +164,7 @@ export default function CreateContent(){
         setWriter('');
         setTitle('')
         setTitleEN('')
-        setSponsorship('')
-        setImage('')
-        setJOB('')
-    }
-    const clear = ()=>{
-        setYears('')
-        setContent('')
         setVolume('')
-        setWriter('');
-        setTitle('')
-        setTitleEN('')
         setSponsorship('')
         setImage('')
         setJOB('')
@@ -174,7 +172,7 @@ export default function CreateContent(){
     const handleJOB = (e:any)=>{
         setJOB(e.target.value)
     }
-    console.log(content)
+    console.log(title)
     return(
         <div className="h-[88vh] px-3">
             <h1 className="text-xl font-semibold">TẠO NỘI DUNG</h1>
@@ -248,19 +246,32 @@ export default function CreateContent(){
                         {select=="tintucsukien"||select=="detainghiencuu"?(
                             <div className="mt-2 px-5 py-2">
                                 <label>Tiêu đề</label>
-                                <textarea value={title} onChange={(e)=>setTitle(e.target.value)} className="h-20 px-3 text-sm py-1 mt-2 outline-none border-gray-300 w-full resize-none border rounded-lg placeholder:text-sm"/>  
+                                <textarea onChange={(e)=>setTitle(e.target.value)} className="h-20 px-3 text-sm py-1 mt-2 outline-none border-gray-300 w-full resize-none border rounded-lg placeholder:text-sm"/>  
                             </div>
-                        ):''}
+                        ):(
+                            (
+                                <div className="px-5 py-2">
+                                    <div className="py-2">
+                                        <label>Người viết bài báo (những người tham gia bài báo)</label>
+                                        <Tiptap content={writer} onChange={(newContent:string)=>setWriter(newContent)}/> 
+                                    </div>
+                                    <div className="mt-2 py-2">
+                                        <label>Năm viết bài báo</label>
+                                        <input type="date" onChange={(e)=>setYears(e.target.value)} className="px-3 text-sm py-2 mt-2 outline-none border-gray-300 w-full resize-none border rounded-md placeholder:text-sm"/>  
+                                    </div>
+                                </div>
+                            )
+                        )}
                         {select=="detainghiencuu"&&(
                             <div className="mt-2 px-5 py-2">
                                 <label>Tiêu đề tiếng anh</label>
-                                <textarea value={titleEN} onChange={(e)=>setTitleEN(e.target.value)} className="h-20 px-3 text-sm py-1 mt-2 outline-none border-gray-300 w-full resize-none border rounded-lg placeholder:text-sm"/>  
+                                <textarea onChange={(e)=>setTitleEN(e.target.value)} className="h-20 px-3 text-sm py-1 mt-2 outline-none border-gray-300 w-full resize-none border rounded-lg placeholder:text-sm"/>  
                             </div>
                         )}
                         {select=="detainghiencuu"?(
                             <div className="mt-2 px-5 py-2">
                                 <label>Người tham gia</label>
-                                <input value={writer} onChange={(e)=>setWriter(e.target.value)} className="px-3 text-sm py-2 mt-2 outline-none border-gray-300 w-full resize-none border rounded-md placeholder:text-sm"/>  
+                                <input onChange={(e)=>setWriter(e.target.value)} className="px-3 text-sm py-2 mt-2 outline-none border-gray-300 w-full resize-none border rounded-md placeholder:text-sm"/>  
                             </div>
                         ):(
                             <div className="mt-2 px-5 py-2">
@@ -268,21 +279,28 @@ export default function CreateContent(){
                                 <Tiptap content={content} onChange={(newContent:string)=>setContent(newContent)}/> 
                             </div>
                         )}
+                        {select!="tintucsukien"&&(
+                            <div className="mt-2 px-5 py-2">
+                            <label>Mã số  hoặc volume</label>
+                            <input onChange={(e)=>setVolume(e.target.value)} className="px-3 text-sm py-2 mt-2 outline-none border-gray-300 w-full resize-none border rounded-md placeholder:text-sm"/>  
+                        </div>
+                        )}
                         {select=="detainghiencuu"?(
-                            <div>
-                                    <div className="mt-2 px-5 py-2">
-                                        <label>Chương trình tài trợ</label>
-                                        <input value={sponsorship} onChange={(e)=>setSponsorship(e.target.value)} className="px-3 text-sm py-2 mt-2 outline-none border-gray-300 w-full resize-none border rounded-md placeholder:text-sm"/>  
-                                    </div>
-                                    <div className="mt-2 px-5 py-2">
-                                        <label>Mã số  hoặc volume</label>
-                                        <input value={volume} onChange={(e)=>setVolume(e.target.value)} className="px-3 text-sm py-2 mt-2 outline-none border-gray-300 w-full resize-none border rounded-md placeholder:text-sm"/>  
-                                    </div>
+                            <div className="mt-2 px-5 py-2">
+                                <label>Chương trình tài trợ</label>
+                                <input onChange={(e)=>setSponsorship(e.target.value)} className="px-3 text-sm py-2 mt-2 outline-none border-gray-300 w-full resize-none border rounded-md placeholder:text-sm"/>  
                             </div>
-                        ):''}
+                        ):(
+                            select!="tintucsukien"&&(
+                                <div className="mt-2 px-5 py-2">
+                                    <label>Link bài báo khoc học</label>
+                                    <input onChange={(e)=>setLink(e.target.value)} className="px-3 text-sm py-2 mt-2 outline-none border-gray-300 w-full resize-none border rounded-md placeholder:text-sm"/>  
+                                </div>
+                            )
+                        )}
                     </div>
                     <div className="px-5 py-5 flex flex-row items-end justify-end gap-3">
-                        <button onClick={clear} className="px-3 w-20 py-2 border border-gray-200 rounded-md hover:bg-[#ebeae9]">Hủy</button>
+                        <button className="px-3 w-20 py-2 border border-gray-200 rounded-md hover:bg-[#ebeae9]">Hủy</button>
                         <button className="px-3 py-2 bg-[#e2e2e1] hover:bg-[#ebeae9] rounded-md w-32">Hoàn tất sau</button>
                         <button onClick={handleSubmit} className="px-3 py-2 bg-[#1d5cb0] w-20 rounded-md text-white hover:bg-[#1c71d8]">Đăng</button>
                     </div>
@@ -349,11 +367,15 @@ export default function CreateContent(){
                         )
                         :(
                             select!="detainghiencuu"?(
-                                content&&(
+                                writer&&(
                                     <div className="mt-5 flex flex-col gap-3 text-base">
                                         <div className="flex flex-row">
                                             <strong className="mr-2">1.</strong>
-                                            <div className="text-justify" dangerouslySetInnerHTML={{__html:content}}/>
+                                            <div className="text-justify" dangerouslySetInnerHTML={{__html:writer+years.slice(0,4)+content}}/>
+                                            
+                                            <div className="">
+                                                {/* <div className="text-justify">{<div dangerouslySetInnerHTML={{__html: writer}}/>}&ensp;({years.slice(0,4)}).&ensp;{<div dangerouslySetInnerHTML={{__html:content}}/>} {link&& <a className="text-green-600" href={link}>&ensp;{link}</a>}</div>                           */}
+                                            </div>
                                         </div>
                                     </div>
                                 )
