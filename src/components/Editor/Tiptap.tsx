@@ -3,7 +3,7 @@ import { useEditor, EditorContent } from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'
 import Toolbar from './Toolbar'
 import Link from '@tiptap/extension-link'
-import { useState } from 'react'
+
 
 const Tiptap = ({onChange,content}:any) => {
     const handleChange = (newContent:string)=>{
@@ -17,7 +17,7 @@ const Tiptap = ({onChange,content}:any) => {
                 openOnClick: false,
                 autolink: true,
                 HTMLAttributes:{
-                    class:"text-green-500"
+                    style:"color:green"
                 }
             })
         ],

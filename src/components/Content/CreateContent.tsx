@@ -5,6 +5,7 @@ import { uploadImage } from "@/hook/SDK";
 import Tiptap from "../Editor/Tiptap";
 
 
+
 interface Data {
     name: string,
     value: string
@@ -68,8 +69,15 @@ export default function CreateContent(){
         }
     }
     const handleCreateTitleSearch = async() =>{
-        const result = await axios.post("/api/content",{
-            type:"detainghiencuu",
+        const ds =  await axios.get("/api/tilteResearch",{
+            headers: {
+                "Content-Type": "application/json",
+                Accept: "application/json",
+            }
+        });
+        const data = ds.data;
+        const result = await axios.post("/api/tilteResearch",{
+            idx:`${Number(data.length)+1}`,
             title:title,
             titleEN: titleEN,
             writer: writer,
@@ -83,6 +91,17 @@ export default function CreateContent(){
             },
         })
         if(result){
+            await axios.post("/api/historyPost",{
+                title: content,
+                time: Date.now(),
+                placePost: "Đề tài nghiên cứu",
+                status: "Đã đăng"
+            },{
+                headers: {
+                    "Content-Type": "application/json",
+                    Accept: "application/json",
+                },
+            })
             setIsCreate(true)
             setWriter('');
             setTitle('')
@@ -95,33 +114,15 @@ export default function CreateContent(){
         }
     }
     const handleCreateConferencePaper = async()=>{
-        const result = await axios.post("/api/content",{
-            type:"baibaohoithao",
-            writer: writer,
-            volume: volume,
-            content: content,
-            years: years.slice(0,4),
-            link: link
-        },{
+        const ds =  await axios.get("/api/conferencePaper",{
             headers: {
                 "Content-Type": "application/json",
                 Accept: "application/json",
-            },
-        })
-        if(result){
-            setIsCreate(true)
-            setWriter('');
-            setYears('')
-            setContent('')
-            setVolume('')
-            setLink('')
-        }else{
-            setIsCreate(false)
-        }
-    }
-    const handleCreateScientificArticle = async() =>{
-        const result = await axios.post("/api/content",{
-            type:"baibaokhoahoc",
+            }
+        });
+        const data = ds.data;
+        const result = await axios.post("/api/conferencePaper",{
+            idx:`${Number(data.length)+1}`,
             content: content
         },{
             headers: {
@@ -130,6 +131,52 @@ export default function CreateContent(){
             },
         })
         if(result){
+            await axios.post("/api/historyPost",{
+                title: content,
+                time: Date.now(),
+                placePost: "Bài Báo Hội Thảo",
+                status: "Đã đăng"
+            },{
+                headers: {
+                    "Content-Type": "application/json",
+                    Accept: "application/json",
+                },
+            })
+            setIsCreate(true)
+            setContent('')
+        }else{
+            setIsCreate(false)
+        }
+    }
+    const handleCreateScientificArticle = async() =>{
+        const ds =  await axios.get("/api/scientificArticle",{
+            headers: {
+                "Content-Type": "application/json",
+                Accept: "application/json",
+            }
+        });
+        const data = ds.data;
+        const result = await axios.post("/api/scientificArticle",{
+            idx:`${Number(data.length)+1}`,
+            content: content
+        },{
+            headers: {
+                "Content-Type": "application/json",
+                Accept: "application/json",
+            },
+        })
+        if(result){
+            await axios.post("/api/historyPost",{
+                title: content,
+                time: Date.now(),
+                placePost: "Bài Báo Khoa Học",
+                status: "Đã đăng"
+            },{
+                headers: {
+                    "Content-Type": "application/json",
+                    Accept: "application/json",
+                },
+            })
             setIsCreate(true)
             setContent('')
         }else{
@@ -159,6 +206,7 @@ export default function CreateContent(){
         setSponsorship('')
         setImage('')
         setJOB('')
+        setIsCreate(null)
     }
     const clear = ()=>{
         setYears('')
@@ -225,7 +273,7 @@ export default function CreateContent(){
                                         <label className="flex flex-col rounded-lg border-4 border-dashed w-full h-60 p-10 group text-center">
                                             <div className="h-full w-full text-center flex flex-col justify-center items-center  ">
                                                 <svg xmlns="http://www.w3.org/2000/svg" className="w-10 h-10 text-blue-400 group-hover:text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
                                                 </svg>
                                                 <div className="flex flex-auto max-h-48 w-2/5 mx-auto -mt-10">
                                                 <img className="has-mask h-36 object-center" src="https://img.freepik.com/free-vector/image-upload-concept-landing-page_52683-27130.jpg?size=338&ext=jpg" alt="freepik image"/>
@@ -325,9 +373,9 @@ export default function CreateContent(){
                             <div className="flex items-center flex-col mt-5 w-full animate-pulse">
                                 <div className="flex items-center flex-col w-full">
                                     <div className="grid bg-gray-300 rounded-lg h-52 w-full place-items-center">
-                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor"
                                         className="w-12 h-12 text-gray-500">
-                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                        <path strokeLinecap="round" strokeLinejoin="round"
                                             d="m2.25 15.75 5.159-5.159a2.25 2.25 0 0 1 3.182 0l5.159 5.159m-1.5-1.5 1.409-1.409a2.25 2.25 0 0 1 3.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 0 0 1.5-1.5V6a1.5 1.5 0 0 0-1.5-1.5H3.75A1.5 1.5 0 0 0 2.25 6v12a1.5 1.5 0 0 0 1.5 1.5Zm10.5-11.25h.008v.008h-.008V8.25Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z">
                                         </path>
                                         </svg>
